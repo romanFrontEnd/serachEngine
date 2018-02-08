@@ -1,0 +1,43 @@
+.appWrapper{
+    display: grid;
+    grid-template-rows: 10% auto;
+    grid-row-gap: 5%;
+}
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+.searchFromWrapper{
+    background-color: lightblue;
+    padding: 5px;
+
+}
+
+.resultWrapper {
+    width: 100%;
+    justify-self: start;
+}
+
+.itemResult {
+    display: grid;
+    height: 25px;
+    font-size: 14px;
+    grid-template-columns: 80% 10%;
+    grid-column-gap: 5%;
+    padding: 5px;
+    border-bottom: 1px solid grey;
+}
+
+.itemResult:nth-child(2n+1) {
+    background-color: lightgrey;
+}
+
+.itemResultDocName {
+    word-wrap: break-word;
+}
+
+.itemResultOccurs {
+    color: red;
+    font-weight: bold;
+}

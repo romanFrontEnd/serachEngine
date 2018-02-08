@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+
+    <link rel="stylesheet" href="main.css" crossorigin="anonymous">
+
+</head>
+<body>
+<div id='root'></div>
+
+
+<script src="https://fb.me/react-15.0.1.js"></script>
+<script src="https://fb.me/react-dom-15.0.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+
+<script type="text/babel">
+
+    const FoundedResult = React.createClass( {
+        render: function (props) {
+            return (<li key={this.props.value.toString()} className="itemResult">
+                <div className="itemResultDocName">{this.props.value.document}</div>
+                <div className="itemResultOccurs">occurs:{this.props.value.frequency}</div>
+            </li>);
+        }
+    } );
+
+    class SearchFrom extends React.Component {
+        constructor(props) {
+            super( props );
+            this.state = { value: '' };
+            this.state = { result: [] };
+
+            this.handleChange = this.handleChange.bind( this );
+            this.handleSubmit = this.handleSubmit.bind( this );
+        }
+
+        handleChange(event) {
+            this.setState( { value: event.target.value } );
+        }
+
+        handleSubmit(event) {
+            event.preventDefault();
+
+            const self = this;
+            if( this.state.value === "" || this.state.value == null ) {
+                console.log( "You should serach smth, Please type you word" );
+                return;
+            }
+            $.ajax( {
+                url: "http://localhost:8080/search/" + self.state.value
+            } ).then( function (data) {
+                self.setState( { result: data } );
+            } );
+        }
+
+        render() {
+            let results = [];
+            if( this.state.result && this.state.result.length > 0 ) {
+                this.state.result.forEach( (res) => {
+                    results.push( <FoundedResult value={res}/> );
+                } );
+            }
+            return (
+                    <div className="appWrapper">
+                        <div className="searchFromWrapper">
+                            <form onSubmit={this.handleSubmit}>
+                                <label>
+                                    Name:
+                                    <input type="text" placeholder="Search..." value={this.state.value} onChange={this.handleChange}/>
+                                </label>
+                                <input type="submit" value="Submit" className="btn-primary"/>
+                            </form>
+                        </div>
+                        <div className="resultWrapper">
+                            <strong>Result:</strong>
+                            <ul>
+                               { results }
+                            </ul>
+                        </div>
+                    </div>
+            );
+        }
+    }
+
+    ReactDOM.render( <SearchFrom></SearchFrom>, document.getElementById( 'root' ) );
+
+</script>
+</body>
+</html>
